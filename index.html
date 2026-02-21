@@ -1005,20 +1005,10 @@ footer {
 </footer>
 
 <script>
-// Nav + logo swap ao rolar
+// Nav ao rolar
 const nav=document.getElementById('nav');
-const logoVerde=document.querySelector('.logo-verde');
-const logoBranca=document.querySelector('.logo-branca');
 window.addEventListener('scroll',()=>{
-  const scrolled = scrollY > 60;
-  nav.classList.toggle('solid', scrolled);
-  if(scrolled){
-    logoVerde.style.display='block';
-    logoBranca.style.display='none';
-  } else {
-    logoVerde.style.display='block';
-    logoBranca.style.display='none';
-  }
+  nav.classList.toggle('solid', scrollY > 60);
 });
 
 // Hero pattern
