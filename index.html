@@ -49,16 +49,29 @@ nav.solid {
   box-shadow: 0 2px 40px rgba(0,0,0,0.07);
 }
 .nav-logo {
-  display:flex; align-items:center;
-  text-decoration:none; min-width:120px;
+  display:flex; flex-direction:column;
+  text-decoration:none; line-height:1;
 }
-.nav-logo img {
-  height: 52px;
-  width: auto;
-  transition: opacity .3s;
+.nav-logo-um {
+  font-family:'Montserrat', sans-serif;
+  font-size:8px; color:#b0b0b0;
+  font-weight:300; letter-spacing:4px;
+  text-transform:uppercase;
+  margin-bottom:0px; margin-left:2px;
 }
-.nav-logo .logo-verde { display:block; }
-.nav-logo .logo-branca { display:none; }
+.nav-logo-main {
+  font-family:'Playfair Display', serif;
+  font-size:32px; color:#556b48;
+  letter-spacing:3px; line-height:1;
+  font-weight:400;
+}
+.nav-logo-sub {
+  font-family:'Montserrat', sans-serif;
+  font-size:6.5px; letter-spacing:7px;
+  text-transform:uppercase; color:#b0b0b0;
+  font-weight:300; margin-top:5px;
+  text-align:center;
+}
 
 /* Linha separadora logo / menu */
 .nav-divider {
@@ -519,13 +532,23 @@ footer {
   border-bottom:1px solid rgba(255,255,255,.08);
 }
 .footer-brand {}
+.footer-logo-um {
+  font-family:'Montserrat', sans-serif;
+  font-size:8px; color:rgba(255,255,255,.45);
+  font-weight:300; letter-spacing:4px;
+  text-transform:uppercase;
+  display:block; margin-bottom:0; margin-left:2px;
+}
 .footer-logo-main {
-  font-family:'Playfair Display',serif; font-size:28px;
-  color:var(--branco); display:block; margin-bottom:4px;
+  font-family:'Playfair Display', serif; font-size:40px;
+  color:var(--branco); display:block;
+  letter-spacing:3px; line-height:1; font-weight:400;
 }
 .footer-logo-sub {
-  font-size:8px; letter-spacing:5px; text-transform:uppercase;
-  color:rgba(255,255,255,.3); display:block; margin-bottom:20px;
+  font-family:'Montserrat', sans-serif;
+  font-size:7px; letter-spacing:7px; text-transform:uppercase;
+  color:rgba(255,255,255,.4); display:block;
+  margin-top:6px; margin-bottom:24px; font-weight:300;
 }
 .footer-desc {
   font-size:11px; line-height:1.9; color:rgba(255,255,255,.4);
@@ -611,8 +634,9 @@ footer {
 <!-- NAV -->
 <nav id="nav">
   <a href="#" class="nav-logo">
-    <img src="logo-verde.png" alt="Um Mimo Personalizados" class="logo-verde">
-    <img src="logo-branca.png" alt="Um Mimo Personalizados" class="logo-branca">
+    <span class="nav-logo-um">UM</span>
+    <span class="nav-logo-main">MIMO</span>
+    <span class="nav-logo-sub">Personalizados</span>
   </a>
   <div class="nav-divider"></div>
   <ul class="nav-menu">
@@ -633,7 +657,6 @@ footer {
   <div class="hero-bg-pattern" id="hp"></div>
 
   <div class="hero-inner">
-    <img src="logo-branca.png" alt="Um Mimo Personalizados" style="height:80px; width:auto; margin-bottom:40px; opacity:0; animation:fadeUp .7s .1s forwards;">
 
     <div class="hero-pill">
       <div class="hero-pill-dot"></div>
@@ -939,7 +962,9 @@ footer {
 <footer>
   <div class="footer-top">
     <div class="footer-brand">
-      <img src="logo-branca.png" alt="Um Mimo Personalizados" style="height:60px; width:auto; margin-bottom:16px; opacity:0.9;">
+      <span class="footer-logo-um">UM</span>
+      <span class="footer-logo-main">MIMO</span>
+      <span class="footer-logo-sub">Personalizados</span>
       <p class="footer-desc">Presentes personalizados feitos com amor para casais, famílias e amigos. Cada mimo conta uma história.</p>
     </div>
     <div>
