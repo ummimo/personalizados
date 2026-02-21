@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Um Mimo Personalizados — Presentes que falam pelo coração</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,600&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --verde: #556b48;
+  --verde-dark: #3e5035;
+  --verde-light: #8fa882;
+  --creme: #f2e8dc;
+  --creme-dark: #e3d4c0;
+  --rosa: #d4a59a;
+  --rosa-light: #ecd5cf;
+  --cinza: #3a3a3a;
+  --cinza-light: #888;
+  --branco: #ffffff;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--branco);
+  color: var(--cinza);
+  overflow-x: hidden;
+}
+
+/* ── CURSOR ── */
+body { cursor: none; }
+#cur { width:8px; height:8px; background:var(--verde); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:transform .15s; }
+#cur-ring { width:32px; height:32px; border:1.5px solid var(--rosa); border-radius:50%; position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:width .3s,height .3s,border-color .3s; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:200;
+  padding: 28px 80px;
+  display: flex; align-items:center; justify-content:space-between;
+  transition: all .4s;
+}
+nav.solid {
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(20px);
+  padding: 18px 80px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+}
+.nav-logo {
+  display:flex; flex-direction:column;
+  text-decoration:none;
+}
+.nav-logo-main {
+  font-family:'Playfair Display',serif;
+  font-size:20px; color:var(--verde); letter-spacing:1px;
+}
+.nav-logo-sub {
+  font-size:8px; letter-spacing:5px; text-transform:uppercase;
+  color:var(--rosa); font-weight:300; margin-top:-1px;
+}
+.nav-menu { display:flex; gap:36px; list-style:none; }
+.nav-menu a {
+  font-size:9px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--cinza); text-decoration:none; font-weight:500;
+  padding-bottom:3px; border-bottom:1px solid transparent;
+  transition:all .2s;
+}
+.nav-menu a:hover { color:var(--verde); border-color:var(--rosa); }
+.nav-cta {
+  background:var(--verde); color:var(--branco)!important;
+  padding:10px 24px!important; border:none!important;
+  transition:background .2s!important;
+}
+.nav-cta:hover { background:var(--verde-dark)!important; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--creme);
+  display: grid;
+  grid-template-columns: 55% 45%;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-left {
+  display:flex; flex-direction:column; justify-content:center;
+  padding: 140px 80px 100px;
+  position:relative; z-index:2;
+}
+
+.hero-pill {
+  display:inline-flex; align-items:center; gap:10px;
+  background:var(--rosa-light); border-radius:100px;
+  padding:8px 20px; width:fit-content; margin-bottom:32px;
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--verde-dark); font-weight:500;
+  opacity:0; animation: fadeUp .7s .2s forwards;
+}
+.hero-pill-dot { width:6px; height:6px; background:var(--rosa); border-radius:50%; }
+
+.hero-h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(48px,5.5vw,80px);
+  line-height:1.08; color:var(--cinza);
+  margin-bottom:12px;
+  opacity:0; animation: fadeUp .7s .4s forwards;
+}
+.hero-h1 em { color:var(--verde); font-style:italic; }
+
+.hero-h1-line2 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(48px,5.5vw,80px);
+  line-height:1.08; color:var(--cinza);
+  margin-bottom:32px;
+  opacity:0; animation: fadeUp .7s .5s forwards;
+}
+
+.hero-p {
+  font-size:14px; line-height:2; color:var(--cinza-light);
+  font-weight:300; max-width:440px; margin-bottom:48px;
+  opacity:0; animation: fadeUp .7s .6s forwards;
+}
+
+.hero-btns {
+  display:flex; gap:16px; flex-wrap:wrap;
+  opacity:0; animation: fadeUp .7s .8s forwards;
+}
+
+.btn-primary {
+  display:inline-flex; align-items:center; gap:12px;
+  background:var(--verde); color:var(--branco);
+  padding:16px 36px; text-decoration:none;
+  font-size:10px; letter-spacing:4px; text-transform:uppercase;
+  font-weight:500; transition:all .3s; position:relative; overflow:hidden;
+}
+.btn-primary::after {
+  content:''; position:absolute; inset:0;
+  background:var(--verde-dark); transform:translateX(-100%);
+  transition:transform .3s;
+}
+.btn-primary:hover::after { transform:translateX(0); }
+.btn-primary span, .btn-primary svg { position:relative; z-index:1; }
+
+.btn-secondary {
+  display:inline-flex; align-items:center; gap:12px;
+  color:var(--cinza); padding:16px 0;
+  text-decoration:none; font-size:10px;
+  letter-spacing:4px; text-transform:uppercase; font-weight:500;
+  border-bottom:1px solid var(--creme-dark); transition:all .3s;
+}
+.btn-secondary:hover { color:var(--verde); border-color:var(--rosa); gap:20px; }
+
+.hero-social {
+  display:flex; gap:24px; margin-top:60px;
+  opacity:0; animation: fadeUp .7s 1s forwards;
+}
+.hero-social-item {
+  display:flex; align-items:center; gap:8px;
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--cinza-light); text-decoration:none; transition:color .2s;
+}
+.hero-social-item:hover { color:var(--verde); }
+.hero-social-line { width:24px; height:1px; background:var(--creme-dark); }
+
+/* Hero right */
+.hero-right {
+  position:relative; overflow:hidden;
+  background:var(--verde);
+}
+
+.hero-right-pattern {
+  position:absolute; inset:0;
+  display:grid; grid-template-columns:repeat(5,1fr);
+  opacity:.06;
+}
+.hero-right-pattern span {
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Playfair Display',serif; font-size:44px; color:var(--branco);
+}
+.hero-right-pattern span:nth-child(odd) { transform:translateY(16px); }
+
+.hero-cards {
+  position:relative; z-index:2;
+  height:100%; display:flex; flex-direction:column;
+  justify-content:center; align-items:center;
+  gap:16px; padding:140px 60px 100px;
+}
+
+.hero-card {
+  background:var(--branco);
+  width:100%; max-width:340px;
+  padding:24px 28px;
+  display:flex; align-items:center; gap:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.12);
+  opacity:0; transform:translateX(40px);
+  transition:transform .4s, box-shadow .3s;
+}
+.hero-card:nth-child(1) { animation: slideIn .7s .5s forwards; }
+.hero-card:nth-child(2) { animation: slideIn .7s .7s forwards; margin-left:30px; }
+.hero-card:nth-child(3) { animation: slideIn .7s .9s forwards; }
+.hero-card:hover { transform:translateX(6px)!important; box-shadow:0 30px 80px rgba(0,0,0,0.18); }
+
+.hero-card-icon {
+  width:52px; height:52px; min-width:52px;
+  background:var(--creme); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px;
+}
+.hero-card-text {}
+.hero-card-title { font-family:'Playfair Display',serif; font-size:16px; color:var(--cinza); margin-bottom:3px; }
+.hero-card-sub { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--cinza-light); }
+
+/* ── FAIXA ── */
+.faixa {
+  background:var(--verde-dark);
+  padding:20px 80px;
+  display:flex; align-items:center; justify-content:center;
+  gap:0; overflow:hidden;
+}
+.faixa-track {
+  display:flex; gap:80px; white-space:nowrap;
+  animation: marquee 20s linear infinite;
+}
+.faixa-item {
+  display:flex; align-items:center; gap:16px;
+  font-size:9px; letter-spacing:5px; text-transform:uppercase;
+  color:rgba(255,255,255,0.7); font-weight:300;
+}
+.faixa-dot { color:var(--rosa-light); font-size:16px; }
+
+/* ── PRODUTOS ── */
+.produtos {
+  padding:120px 80px;
+  max-width:1400px; margin:0 auto;
+}
+
+.section-header {
+  display:flex; align-items:flex-end;
+  justify-content:space-between; margin-bottom:64px;
+}
+
+.section-tag {
+  font-size:9px; letter-spacing:6px; text-transform:uppercase;
+  color:var(--rosa); display:block; margin-bottom:16px; font-weight:500;
+}
+
+.section-title {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(32px,3.5vw,52px);
+  line-height:1.15; color:var(--cinza);
+}
+.section-title em { color:var(--verde); font-style:italic; }
+
+.ver-todos {
+  font-size:9px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--cinza-light); text-decoration:none;
+  border-bottom:1px solid var(--creme-dark);
+  padding-bottom:4px; transition:all .2s; white-space:nowrap; margin-bottom:8px;
+}
+.ver-todos:hover { color:var(--verde); border-color:var(--rosa); }
+
+/* Grid de produtos */
+.produtos-grid {
+  display:grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap:16px;
+}
+
+.prod {
+  position:relative; overflow:hidden;
+  background:var(--creme);
+  transition:transform .4s;
+}
+.prod:hover { transform:translateY(-4px); }
+.prod:hover .prod-img { transform:scale(1.06); }
+.prod:hover .prod-hover { opacity:1; }
+
+.prod-img-wrap { overflow:hidden; position:relative; }
+.prod-img {
+  width:100%; transition:transform .6s ease;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--creme-dark);
+}
+
+.prod-emoji {
+  font-size:80px; padding:60px;
+  display:flex; align-items:center; justify-content:center;
+}
+
+.prod-hover {
+  position:absolute; inset:0;
+  background:rgba(85,107,72,.82);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity .3s;
+}
+.prod-hover-btn {
+  font-size:9px; letter-spacing:4px; text-transform:uppercase;
+  color:var(--branco); border:1px solid rgba(255,255,255,.6);
+  padding:12px 28px; text-decoration:none; transition:all .2s;
+}
+.prod-hover-btn:hover { background:var(--rosa); border-color:var(--rosa); }
+
+.prod-info { padding:24px 28px; background:var(--branco); }
+.prod-cat {
+  font-size:8px; letter-spacing:4px; text-transform:uppercase;
+  color:var(--rosa); margin-bottom:6px; display:block;
+}
+.prod-nome {
+  font-family:'Playfair Display',serif; font-size:20px;
+  color:var(--cinza); margin-bottom:6px;
+}
+.prod-desc { font-size:11px; color:var(--cinza-light); line-height:1.7; font-weight:300; }
+
+/* Produto destaque (maior) */
+.prod-destaque { grid-row:span 2; }
+.prod-destaque .prod-emoji { font-size:120px; padding:100px 80px; }
+
+/* ── COMO FUNCIONA ── */
+.como {
+  background:var(--creme);
+  padding:120px 80px;
+}
+.como-inner { max-width:1400px; margin:0 auto; }
+.como-grid {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:2px; margin-top:64px;
+  background:var(--creme-dark);
+}
+.como-step {
+  background:var(--creme); padding:56px 44px;
+  position:relative; overflow:hidden;
+  transition:background .3s;
+}
+.como-step:hover { background:var(--verde); }
+.como-step:hover .como-num { color:rgba(255,255,255,.06); }
+.como-step:hover .como-icon { color:var(--rosa-light); }
+.como-step:hover .como-titulo { color:var(--branco); }
+.como-step:hover .como-texto { color:rgba(255,255,255,.65); }
+
+.como-num {
+  font-family:'Playfair Display',serif; font-size:100px;
+  color:var(--creme-dark); position:absolute;
+  top:-10px; right:20px; line-height:1;
+  transition:color .3s; user-select:none;
+}
+.como-icon { font-size:32px; display:block; margin-bottom:24px; transition:color .3s; }
+.como-titulo {
+  font-family:'Playfair Display',serif; font-size:20px;
+  color:var(--cinza); margin-bottom:12px; transition:color .3s;
+}
+.como-texto { font-size:12px; color:var(--cinza-light); line-height:1.8; font-weight:300; transition:color .3s; }
+
+/* ── PARA QUEM ── */
+.para-quem {
+  padding:120px 80px;
+  max-width:1400px; margin:0 auto;
+}
+.para-quem-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:16px; margin-top:64px;
+}
+.pq-card {
+  position:relative; overflow:hidden; padding:64px 48px;
+  transition:transform .3s;
+}
+.pq-card:hover { transform:translateY(-6px); }
+
+.pq-card-1 { background:var(--verde); }
+.pq-card-2 { background:var(--rosa); }
+.pq-card-3 { background:var(--creme-dark); }
+
+.pq-icon { font-size:48px; display:block; margin-bottom:28px; }
+.pq-titulo {
+  font-family:'Playfair Display',serif; font-size:28px;
+  margin-bottom:16px;
+}
+.pq-card-1 .pq-titulo, .pq-card-2 .pq-titulo { color:var(--branco); }
+.pq-card-3 .pq-titulo { color:var(--cinza); }
+
+.pq-texto { font-size:12px; line-height:1.9; font-weight:300; }
+.pq-card-1 .pq-texto, .pq-card-2 .pq-texto { color:rgba(255,255,255,.75); }
+.pq-card-3 .pq-texto { color:var(--cinza-light); }
+
+.pq-tag {
+  display:inline-block; margin-top:28px;
+  font-size:8px; letter-spacing:4px; text-transform:uppercase;
+  border-bottom:1px solid; padding-bottom:4px;
+}
+.pq-card-1 .pq-tag, .pq-card-2 .pq-tag { color:rgba(255,255,255,.5); border-color:rgba(255,255,255,.2); }
+.pq-card-3 .pq-tag { color:var(--cinza-light); border-color:var(--creme-dark); }
+
+/* Deco M */
+.pq-deco {
+  font-family:'Playfair Display',serif; font-size:200px;
+  position:absolute; bottom:-40px; right:-20px; line-height:1;
+  opacity:.06; pointer-events:none; user-select:none;
+}
+.pq-card-1 .pq-deco, .pq-card-2 .pq-deco { color:var(--branco); }
+.pq-card-3 .pq-deco { color:var(--verde); }
+
+/* ── DEPOIMENTOS ── */
+.depoimentos {
+  background:var(--verde);
+  padding:120px 80px;
+  position:relative; overflow:hidden;
+}
+.depoimentos::after {
+  content:'❝';
+  font-family:'Playfair Display',serif; font-size:400px;
+  color:rgba(255,255,255,.03); position:absolute;
+  bottom:-80px; right:60px; line-height:1;
+  pointer-events:none;
+}
+.depoimentos .section-tag { color:var(--rosa-light); }
+.depoimentos .section-title { color:var(--branco); }
+.depo-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:16px; margin-top:64px; position:relative; z-index:1;
+  max-width:1400px; margin-left:auto; margin-right:auto;
+}
+.depo-card {
+  background:rgba(255,255,255,.06);
+  padding:48px 40px;
+  border:1px solid rgba(255,255,255,.08);
+  transition:background .3s, transform .3s;
+}
+.depo-card:hover {
+  background:rgba(255,255,255,.1);
+  transform:translateY(-4px);
+}
+.depo-stars { color:var(--rosa-light); font-size:14px; margin-bottom:24px; letter-spacing:3px; }
+.depo-texto {
+  font-family:'Playfair Display',serif; font-style:italic;
+  font-size:16px; line-height:1.7; color:rgba(255,255,255,.9);
+  margin-bottom:32px;
+}
+.depo-autor { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,.4); }
+.depo-produto { color:var(--rosa-light); }
+
+/* ── CTA WHATSAPP ── */
+.cta {
+  background:var(--creme);
+  padding:140px 80px;
+  text-align:center; position:relative; overflow:hidden;
+}
+.cta::before {
+  content:'MIMO';
+  font-family:'Playfair Display',serif; font-size:300px;
+  color:rgba(85,107,72,.04); position:absolute;
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  letter-spacing:-10px; white-space:nowrap;
+  pointer-events:none; user-select:none;
+}
+.cta-inner { position:relative; z-index:1; max-width:700px; margin:0 auto; }
+.cta-title {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,5vw,72px); line-height:1.1;
+  color:var(--cinza); margin-bottom:24px;
+}
+.cta-title em { color:var(--verde); font-style:italic; }
+.cta-sub {
+  font-size:14px; color:var(--cinza-light);
+  font-weight:300; line-height:2; margin-bottom:56px;
+}
+.wpp-btn {
+  display:inline-flex; align-items:center; gap:14px;
+  background:#25d366; color:var(--branco);
+  padding:20px 52px; text-decoration:none;
+  font-size:11px; letter-spacing:4px; text-transform:uppercase;
+  font-weight:500; transition:all .3s;
+  box-shadow: 0 20px 60px rgba(37,211,102,.3);
+}
+.wpp-btn:hover {
+  background:#1ebe5d;
+  box-shadow:0 24px 80px rgba(37,211,102,.4);
+  transform:translateY(-2px);
+}
+.cta-info {
+  display:flex; justify-content:center; gap:60px;
+  margin-top:60px; padding-top:48px;
+  border-top:1px solid var(--creme-dark);
+}
+.cta-info-item { text-align:center; }
+.cta-info-label {
+  font-size:8px; letter-spacing:4px; text-transform:uppercase;
+  color:var(--rosa); display:block; margin-bottom:8px;
+}
+.cta-info-val {
+  font-family:'Playfair Display',serif; font-size:16px; color:var(--cinza);
+}
+
+/* ── FOOTER ── */
+footer {
+  background:var(--cinza);
+  padding:64px 80px 40px;
+}
+.footer-top {
+  display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:60px; padding-bottom:48px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.footer-brand {}
+.footer-logo-main {
+  font-family:'Playfair Display',serif; font-size:28px;
+  color:var(--branco); display:block; margin-bottom:4px;
+}
+.footer-logo-sub {
+  font-size:8px; letter-spacing:5px; text-transform:uppercase;
+  color:rgba(255,255,255,.3); display:block; margin-bottom:20px;
+}
+.footer-desc {
+  font-size:11px; line-height:1.9; color:rgba(255,255,255,.4);
+  font-weight:300; max-width:260px;
+}
+.footer-col-title {
+  font-size:9px; letter-spacing:4px; text-transform:uppercase;
+  color:rgba(255,255,255,.3); margin-bottom:20px; display:block;
+}
+.footer-links { list-style:none; display:flex; flex-direction:column; gap:12px; }
+.footer-links a {
+  font-size:12px; color:rgba(255,255,255,.55); text-decoration:none;
+  transition:color .2s; font-weight:300;
+}
+.footer-links a:hover { color:var(--rosa-light); }
+.footer-bottom {
+  display:flex; align-items:center; justify-content:space-between;
+  padding-top:32px;
+}
+.footer-copy { font-size:9px; letter-spacing:2px; color:rgba(255,255,255,.2); text-transform:uppercase; }
+.footer-cores { display:flex; gap:8px; }
+.footer-cor { width:14px; height:14px; border-radius:50%; }
+
+/* ── ANIMAÇÕES ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(30px); }
+  to { opacity:1; transform:translateY(0); }
+}
+@keyframes slideIn {
+  from { opacity:0; transform:translateX(40px); }
+  to { opacity:1; transform:translateX(0); }
+}
+@keyframes marquee {
+  from { transform:translateX(0); }
+  to { transform:translateX(-50%); }
+}
+
+.reveal { opacity:0; transform:translateY(36px); transition:opacity .8s ease, transform .8s ease; }
+.reveal.on { opacity:1; transform:translateY(0); }
+.reveal-d1 { transition-delay:.1s; }
+.reveal-d2 { transition-delay:.2s; }
+.reveal-d3 { transition-delay:.3s; }
+.reveal-d4 { transition-delay:.4s; }
+.reveal-d5 { transition-delay:.5s; }
+
+/* ── RESPONSIVO ── */
+@media(max-width:1024px) {
+  nav { padding:20px 30px; }
+  nav.solid { padding:14px 30px; }
+  .nav-menu { display:none; }
+  .hero { grid-template-columns:1fr; }
+  .hero-right { display:none; }
+  .hero-left { padding:120px 30px 80px; }
+  .faixa { padding:20px 30px; }
+  .produtos { padding:80px 30px; }
+  .produtos-grid { grid-template-columns:1fr 1fr; }
+  .prod-destaque { grid-row:span 1; }
+  .como { padding:80px 30px; }
+  .como-grid { grid-template-columns:1fr 1fr; }
+  .para-quem { padding:80px 30px; }
+  .para-quem-grid { grid-template-columns:1fr; }
+  .depoimentos { padding:80px 30px; }
+  .depo-grid { grid-template-columns:1fr; }
+  .cta { padding:80px 30px; }
+  .cta-info { flex-direction:column; gap:28px; }
+  footer { padding:60px 30px 32px; }
+  .footer-top { grid-template-columns:1fr 1fr; gap:40px; }
+  .footer-bottom { flex-direction:column; gap:20px; }
+  .section-header { flex-direction:column; align-items:flex-start; gap:20px; }
+}
+@media(max-width:600px) {
+  .produtos-grid { grid-template-columns:1fr; }
+  .como-grid { grid-template-columns:1fr; }
+  .hero-btns { flex-direction:column; }
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-main">MIMO</span>
+    <span class="nav-logo-sub">Personalizados</span>
+  </a>
+  <ul class="nav-menu">
+    <li><a href="#produtos">Produtos</a></li>
+    <li><a href="#como">Como funciona</a></li>
+    <li><a href="#sobre">Para quem</a></li>
+    <li><a href="#contato" class="nav-cta">Pedir agora</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-pill">
+      <div class="hero-pill-dot"></div>
+      Presentes que emocionam
+    </div>
+    <h1 class="hero-h1">Cada presente,<br>uma <em>história</em></h1>
+    <h2 class="hero-h1-line2" style="font-family:'Playfair Display',serif; font-size:clamp(48px,5.5vw,80px); line-height:1.08; color:var(--cinza); margin-bottom:32px; opacity:0; animation:fadeUp .7s .5s forwards; font-weight:400;"></h2>
+    <p class="hero-p">Polaroides, ecobags, camisas e muito mais — tudo personalizado com o seu jeito, para as pessoas que você ama. Casais, famílias, amigos.</p>
+    <div class="hero-btns">
+      <a href="#contato" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        <span>Pedir pelo WhatsApp</span>
+      </a>
+      <a href="#produtos" class="btn-secondary">
+        Ver produtos
+        <svg width="16" height="6" viewBox="0 0 16 6" fill="none">
+          <path d="M0 3H14M11 1L14 3L11 5" stroke="currentColor" stroke-width="1"/>
+        </svg>
+      </a>
+    </div>
+    <div class="hero-social">
+      <div class="hero-social-line"></div>
+      <a href="#" class="hero-social-item">Instagram</a>
+      <a href="#" class="hero-social-item">WhatsApp</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-right-pattern" id="hp"></div>
+    <div class="hero-cards">
+      <div class="hero-card">
+        <div class="hero-card-icon">📸</div>
+        <div class="hero-card-text">
+          <div class="hero-card-title">Fotos Polaroides</div>
+          <div class="hero-card-sub">Memórias em papel</div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-icon">👕</div>
+        <div class="hero-card-text">
+          <div class="hero-card-title">Camisas & Ecobags</div>
+          <div class="hero-card-sub">Use com afeto</div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-icon">🎁</div>
+        <div class="hero-card-text">
+          <div class="hero-card-title">Kits Personalizados</div>
+          <div class="hero-card-sub">Do seu jeito</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAIXA -->
+<div class="faixa">
+  <div class="faixa-track" id="faixaTrack">
+    <span class="faixa-item"><span class="faixa-dot">✦</span> Polaroides</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> Ecobags</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> Camisas</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> Kits Presente</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> Sacolas</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> Cartões</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> 100% Personalizado</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> Feito com Amor</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> Polaroides</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> Ecobags</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> Camisas</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> Kits Presente</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> Sacolas</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> Cartões</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> 100% Personalizado</span>
+    <span class="faixa-item"><span class="faixa-dot">✦</span> Feito com Amor</span>
+  </div>
+</div>
+
+<!-- PRODUTOS -->
+<section class="produtos" id="produtos">
+  <div class="section-header reveal">
+    <div>
+      <span class="section-tag">Nosso catálogo</span>
+      <h2 class="section-title">O que criamos <em>para você</em></h2>
+    </div>
+    <a href="#contato" class="ver-todos">Solicitar personalizado →</a>
+  </div>
+
+  <div class="produtos-grid">
+    <!-- Destaque -->
+    <div class="prod prod-destaque reveal">
+      <div class="prod-img-wrap">
+        <div class="prod-img" style="background:linear-gradient(135deg,#556b48,#7a9468);">
+          <div class="prod-emoji">📸</div>
+        </div>
+        <div class="prod-hover"><a href="#contato" class="prod-hover-btn">Solicitar agora</a></div>
+      </div>
+      <div class="prod-info">
+        <span class="prod-cat">Mais pedido</span>
+        <h3 class="prod-nome">Fotos Polaroides</h3>
+        <p class="prod-desc">Transforme suas fotos favoritas em polaroides únicas. Perfeito para decoração, presentes e recordações que duram para sempre.</p>
+      </div>
+    </div>
+
+    <div class="prod reveal reveal-d1">
+      <div class="prod-img-wrap">
+        <div class="prod-img" style="background:linear-gradient(135deg,#d4a59a,#e8c5bc);">
+          <div class="prod-emoji">🛍</div>
+        </div>
+        <div class="prod-hover"><a href="#contato" class="prod-hover-btn">Solicitar</a></div>
+      </div>
+      <div class="prod-info">
+        <span class="prod-cat">Ecobag</span>
+        <h3 class="prod-nome">Ecobag Personalizada</h3>
+        <p class="prod-desc">Sustentável e cheia de estilo. Com a sua arte, foto ou frase.</p>
+      </div>
+    </div>
+
+    <div class="prod reveal reveal-d2">
+      <div class="prod-img-wrap">
+        <div class="prod-img" style="background:linear-gradient(135deg,#8fa882,#556b48);">
+          <div class="prod-emoji">👕</div>
+        </div>
+        <div class="prod-hover"><a href="#contato" class="prod-hover-btn">Solicitar</a></div>
+      </div>
+      <div class="prod-info">
+        <span class="prod-cat">Vestuário</span>
+        <h3 class="prod-nome">Camisas Personalizadas</h3>
+        <p class="prod-desc">Seu design favorito estampado com qualidade e carinho.</p>
+      </div>
+    </div>
+
+    <div class="prod reveal reveal-d1">
+      <div class="prod-img-wrap">
+        <div class="prod-img" style="background:linear-gradient(135deg,#e3d4c0,#f2e8dc);">
+          <div class="prod-emoji" style="font-size:60px;">🎁</div>
+        </div>
+        <div class="prod-hover"><a href="#contato" class="prod-hover-btn">Solicitar</a></div>
+      </div>
+      <div class="prod-info">
+        <span class="prod-cat">Kit presente</span>
+        <h3 class="prod-nome">Kits Personalizados</h3>
+        <p class="prod-desc">Combine polaroides, ecobag, camisa e muito mais em um kit único.</p>
+      </div>
+    </div>
+
+    <div class="prod reveal reveal-d2">
+      <div class="prod-img-wrap">
+        <div class="prod-img" style="background:linear-gradient(135deg,#c49a8f,#d4a59a);">
+          <div class="prod-emoji" style="font-size:60px;">✉</div>
+        </div>
+        <div class="prod-hover"><a href="#contato" class="prod-hover-btn">Solicitar</a></div>
+      </div>
+      <div class="prod-info">
+        <span class="prod-cat">Papelaria</span>
+        <h3 class="prod-nome">Cartões & Tags</h3>
+        <p class="prod-desc">Detalhes que fazem toda a diferença na hora de presentear.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="como" id="como">
+  <div class="como-inner">
+    <div class="section-header reveal">
+      <div>
+        <span class="section-tag">Simples assim</span>
+        <h2 class="section-title">Como <em>funciona</em></h2>
+      </div>
+    </div>
+    <div class="como-grid">
+      <div class="como-step reveal">
+        <span class="como-num">01</span>
+        <span class="como-icon">💬</span>
+        <h3 class="como-titulo">Fale conosco</h3>
+        <p class="como-texto">Entre em contato pelo WhatsApp e conta o que você imagina. Atendimento personalizado do início ao fim.</p>
+      </div>
+      <div class="como-step reveal reveal-d1">
+        <span class="como-num">02</span>
+        <span class="como-icon">🎨</span>
+        <h3 class="como-titulo">Enviamos a arte</h3>
+        <p class="como-texto">Nossa equipe cria a arte personalizada e te envia para aprovação. Ajustamos até ficar perfeito.</p>
+      </div>
+      <div class="como-step reveal reveal-d2">
+        <span class="como-num">03</span>
+        <span class="como-icon">✅</span>
+        <h3 class="como-titulo">Aprovação</h3>
+        <p class="como-texto">Você aprova a arte e confirmamos o pedido. Só produzimos com a sua satisfação garantida.</p>
+      </div>
+      <div class="como-step reveal reveal-d3">
+        <span class="como-num">04</span>
+        <span class="como-icon">🚚</span>
+        <h3 class="como-titulo">Entrega</h3>
+        <p class="como-texto">Seu mimo chega até você com cuidado e carinho. Pronto para alegrar quem você ama.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA QUEM -->
+<section style="padding:120px 80px; background:var(--branco);" id="sobre">
+  <div style="max-width:1400px; margin:0 auto;">
+    <div class="section-header reveal">
+      <div>
+        <span class="section-tag">Para quem é</span>
+        <h2 class="section-title">Feito para quem <em>ama</em></h2>
+      </div>
+    </div>
+    <div class="para-quem-grid">
+      <div class="pq-card pq-card-1 reveal">
+        <span class="pq-icon">💑</span>
+        <h3 class="pq-titulo">Casais</h3>
+        <p class="pq-texto">Eternize os momentos mais especiais do casal. Aniversários, pedidos de namoro, datas comemorativas — cada lembrança merece ser celebrada.</p>
+        <span class="pq-tag">Ver ideias →</span>
+        <div class="pq-deco">M</div>
+      </div>
+      <div class="pq-card pq-card-2 reveal reveal-d2">
+        <span class="pq-icon">👨‍👩‍👧‍👦</span>
+        <h3 class="pq-titulo">Famílias</h3>
+        <p class="pq-texto">Presentes que unem e emocionam toda a família. Dia das mães, dia dos pais, natal — crie memórias que ficam para sempre.</p>
+        <span class="pq-tag">Ver ideias →</span>
+        <div class="pq-deco">M</div>
+      </div>
+      <div class="pq-card pq-card-3 reveal reveal-d4">
+        <span class="pq-icon">🥂</span>
+        <h3 class="pq-titulo">Amigos</h3>
+        <p class="pq-texto">Aquela amizade que merece ser celebrada com algo único. Formatura, aniversário ou só porque sim — amigos merecem o melhor.</p>
+        <span class="pq-tag">Ver ideias →</span>
+        <div class="pq-deco">M</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="depoimentos">
+  <div style="max-width:1400px; margin:0 auto;">
+    <div class="section-header reveal" style="max-width:1400px;">
+      <div>
+        <span class="section-tag">Quem já amou</span>
+        <h2 class="section-title">O que dizem <em>sobre nós</em></h2>
+      </div>
+    </div>
+    <div class="depo-grid">
+      <div class="depo-card reveal">
+        <div class="depo-stars">★★★★★</div>
+        <p class="depo-texto">"As polaroides ficaram lindas demais! Dei de presente para o meu namorado no aniversário e ele chorou de emoção. Super recomendo!"</p>
+        <span class="depo-autor">Ana Clara · <span class="depo-produto">Polaroides</span></span>
+      </div>
+      <div class="depo-card reveal reveal-d2">
+        <div class="depo-stars">★★★★★</div>
+        <p class="depo-texto">"Pedi um kit para o dia das mães com ecobag e cartão personalizado. Minha mãe ficou emocionada. Atendimento incrível e produto maravilhoso!"</p>
+        <span class="depo-autor">Lucas M. · <span class="depo-produto">Kit Presente</span></span>
+      </div>
+      <div class="depo-card reveal reveal-d4">
+        <div class="depo-stars">★★★★★</div>
+        <p class="depo-texto">"Fiz camisas personalizadas para toda a família na viagem. Todo mundo amou! A qualidade superou minhas expectativas."</p>
+        <span class="depo-autor">Família Silva · <span class="depo-produto">Camisas</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA WHATSAPP -->
+<section class="cta" id="contato">
+  <div class="cta-inner">
+    <span class="section-tag reveal">Pronto para começar?</span>
+    <h2 class="cta-title reveal">Vamos criar algo<br><em>inesquecível?</em></h2>
+    <p class="cta-sub reveal">Fale com a gente agora pelo WhatsApp. Atendimento rápido, personalizado e com muito carinho. Seu mimo está a uma mensagem de distância.</p>
+    <a href="https://wa.me/5500000000000" class="wpp-btn reveal" target="_blank">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      Chamar no WhatsApp
+    </a>
+    <div class="cta-info reveal">
+      <div class="cta-info-item">
+        <span class="cta-info-label">WhatsApp</span>
+        <span class="cta-info-val">(00) 00000-0000</span>
+      </div>
+      <div class="cta-info-item">
+        <span class="cta-info-label">Instagram</span>
+        <span class="cta-info-val">@ummimopersonalizados</span>
+      </div>
+      <div class="cta-info-item">
+        <span class="cta-info-label">Atendimento</span>
+        <span class="cta-info-val">Seg – Sáb · 9h às 19h</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="footer-logo-main">MIMO</span>
+      <span class="footer-logo-sub">Um Mimo Personalizados</span>
+      <p class="footer-desc">Presentes personalizados feitos com amor para casais, famílias e amigos. Cada mimo conta uma história.</p>
+    </div>
+    <div>
+      <span class="footer-col-title">Produtos</span>
+      <ul class="footer-links">
+        <li><a href="#produtos">Polaroides</a></li>
+        <li><a href="#produtos">Ecobags</a></li>
+        <li><a href="#produtos">Camisas</a></li>
+        <li><a href="#produtos">Kits Presente</a></li>
+        <li><a href="#produtos">Cartões & Tags</a></li>
+      </ul>
+    </div>
+    <div>
+      <span class="footer-col-title">Navegação</span>
+      <ul class="footer-links">
+        <li><a href="#sobre">Para quem é</a></li>
+        <li><a href="#como">Como funciona</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+    </div>
+    <div>
+      <span class="footer-col-title">Contato</span>
+      <ul class="footer-links">
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 Um Mimo Personalizados — Todos os direitos reservados</p>
+    <div class="footer-cores">
+      <div class="footer-cor" style="background:#556b48;"></div>
+      <div class="footer-cor" style="background:#d4a59a;"></div>
+      <div class="footer-cor" style="background:#f2e8dc;"></div>
+      <div class="footer-cor" style="background:#ffffff; border:1px solid #555;"></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Cursor
+const cur = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+(function anim(){
+  rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(anim);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    cur.style.transform='translate(-50%,-50%) scale(2.5)';
+    ring.style.width='56px'; ring.style.height='56px';
+    ring.style.borderColor='var(--verde)';
+  });
+  el.addEventListener('mouseleave',()=>{
+    cur.style.transform='translate(-50%,-50%) scale(1)';
+    ring.style.width='32px'; ring.style.height='32px';
+    ring.style.borderColor='var(--rosa)';
+  });
+});
+
+// Nav
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>60));
+
+// Hero pattern
+const hp=document.getElementById('hp');
+for(let i=0;i<50;i++){const s=document.createElement('span');s.textContent='M';hp.appendChild(s);}
+
+// Reveal
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target);}});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
